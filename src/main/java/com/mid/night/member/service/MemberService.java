@@ -11,6 +11,7 @@ import com.mid.night.plant.domain.Plant;
 import com.mid.night.plant.repository.PlantRepository;
 import com.mid.night.redis.domain.RefreshToken;
 import com.mid.night.redis.repository.RefreshTokenRedisRepository;
+import com.mid.night.weather.controller.WeatherController;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,8 @@ public class MemberService {
 
         Plant plant = plantRepository.findPlantByMember(member)
                 .orElseThrow(() -> new Exception400("해당 회원은 키우고 있는 식물이 없습니다."));
+
+        WeatherController.GET_LOCATION_COUNT = 0;
 
         return getAuthTokenDTO(member, plant, httpServletRequest);
     }

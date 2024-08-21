@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class LocationService {
 
     // 맑음, 구름, 비
-    private static final int[] LATITUDE = {38, 78, 27, 38};
-    private static final int[] LONGITUDE = {38, 78, 76, 38};
+    private static final int[] LATITUDE = {38, 78, 27, 88};
+    private static final int[] LONGITUDE = {38, 78, 76, 178};
 
     public LocationRequestDTO.GetLocationDTO getLocation(int getLocationCount) {
 

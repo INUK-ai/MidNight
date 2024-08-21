@@ -27,8 +27,8 @@ public class WeatherController {
 
     private static final String REQUEST_URL = "http://192.168.1.43:7777/weather";
     private static final String CurrentNickName = "MTVS";
+    public static int GET_LOCATION_COUNT = 0;
 
-    private static int GET_LOCATION_COUNT = 0;
     private final MemberRepository memberRepository;
 
     /*
@@ -53,9 +53,8 @@ public class WeatherController {
 
         log.info("currentMemberId : " + CurrentNickName);
 
-        if(GET_LOCATION_COUNT < 3) {
-            GET_LOCATION_COUNT++;
-        }
+        GET_LOCATION_COUNT++;
+        GET_LOCATION_COUNT %= 4;
 
         // 토큰 값 저장
         weatherTokenService.updateWeatherToken(CurrentNickName, resultDTO);
