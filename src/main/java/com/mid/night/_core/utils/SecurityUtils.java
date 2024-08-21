@@ -5,13 +5,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
 
-    public static String getCurrentMemberId() {
+    public static String getCurrentMemberNickName() {
 
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if(name.equals("anonymousUser")) {
-            throw new Exception403("익명의 유저는 접근 권한이 없습니다.");
-        }
+//        if(name.equals("anonymousUser")) {
+//            throw new Exception403("익명의 유저는 접근 권한이 없습니다.");
+//        }
 
         return name;
     }

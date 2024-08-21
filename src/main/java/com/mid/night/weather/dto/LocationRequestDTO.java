@@ -1,4 +1,4 @@
-package com.mid.night.location.dto;
+package com.mid.night.weather.dto;
 
 public class LocationRequestDTO {
 

@@ -1,7 +1,6 @@
-package com.mid.night.location.service;
+package com.mid.night.weather.service;
 
-import com.mid.night.location.dto.LocationRequestDTO;
-import com.mid.night.location.dto.LocationResponseDTO;
+import com.mid.night.weather.dto.LocationRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

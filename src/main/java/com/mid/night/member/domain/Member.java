@@ -28,6 +28,9 @@ public class Member extends BaseTimeEntity {
     private Authority authority;
 
     @Column
+    private int plantNums;
+
+    @Column
     private int sunny;
     @Column
     private int cloudy;
@@ -43,10 +46,31 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
         this.password = password;
         this.authority = authority;
+        this.plantNums = 0;
         this.sunny = 5;
         this.cloudy = 4;
         this.windy = 3;
         this.rainy = 2;
         this.snowy = 1;
+    }
+
+    public void updateSunny(int count) {
+        this.sunny += count;
+    }
+
+    public void updateCloudy(int count) {
+        this.cloudy += count;
+    }
+
+    public void updateWindy(int count) {
+        this.windy += count;
+    }
+
+    public void updateRainy(int count) {
+        this.rainy += count;
+    }
+
+    public void updateSnowy(int count) {
+        this.snowy += count;
     }
 }

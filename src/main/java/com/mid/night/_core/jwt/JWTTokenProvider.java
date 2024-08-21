@@ -85,6 +85,9 @@ public class JWTTokenProvider {
                 ACCESS_TOKEN_LIFETIME,
                 refreshToken,
                 REFRESH_TOKEN_LIFETIME,
+                String.valueOf(0), // GrowthGauge
+                "토마토",
+                String.valueOf(member.getPlantNums()),
                 String.valueOf(member.getSunny()),
                 String.valueOf(member.getCloudy()),
                 String.valueOf(member.getWindy()),

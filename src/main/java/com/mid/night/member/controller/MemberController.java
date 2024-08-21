@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.mid.night._core.utils.SecurityUtils.getCurrentMemberId;
+import static com.mid.night._core.utils.SecurityUtils.getCurrentMemberNickName;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class MemberController {
 
         log.info("로그아웃 시도");
 
-        MemberResponseDTO.RecordDTO responseDTO = memberService.logout(httpServletRequest, getCurrentMemberId());
+        MemberResponseDTO.RecordDTO responseDTO = memberService.logout(httpServletRequest, getCurrentMemberNickName());
 
         return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
     }

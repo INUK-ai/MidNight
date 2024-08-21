@@ -7,6 +7,7 @@ import com.mid.night.member.domain.Member;
 import com.mid.night.member.dto.MemberRequestDTO;
 import com.mid.night.member.dto.MemberResponseDTO;
 import com.mid.night.member.repository.MemberRepository;
+import com.mid.night.plant.repository.PlantRepository;
 import com.mid.night.redis.domain.RefreshToken;
 import com.mid.night.redis.repository.RefreshTokenRedisRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,12 +32,14 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PlantRepository plantRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JWTTokenProvider jwtTokenProvider;
 
+    @Transactional
     public MemberResponseDTO.authTokenDTO login(HttpServletRequest httpServletRequest, MemberRequestDTO.loginDTO requestDTO) {
         String nickName = requestDTO.UserName();
 
@@ -50,17 +53,8 @@ public class MemberService {
         Member member = memberRepository.findMemberByNickName(nickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
+
         return getAuthTokenDTO(member, httpServletRequest);
-    }
-
-    // 비밀번호 확인
-    private void checkValidPassword(String rawPassword, String encodedPassword) {
-
-        log.info("{} {}", rawPassword, encodedPassword);
-
-        if(!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new Exception400("비밀번호가 일치하지 않습니다.");
-        }
     }
 
     protected Optional<Member> findMemberByNickName(String nickName) {
@@ -133,6 +127,6 @@ public class MemberService {
 
         String plantName = "토마토";
 
-        return new MemberResponseDTO.RecordDTO(member.getNickName(), null, plantName);
+        return new MemberResponseDTO.RecordDTO(member.getNickName(), String.valueOf(member.getPlantNums()), plantName);
     }
 }
