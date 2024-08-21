@@ -75,6 +75,7 @@ public class MemberService {
         member.initWindy(2);
         member.initRainy(2);
         member.initSnowy(2);
+        member.initPlantNums(0);
 
         memberRepository.save(member);
     }

@@ -97,4 +97,8 @@ public class Member extends BaseTimeEntity {
     public void updatePlantNums() {
         this.plantNums++;
     }
+
+    public void initPlantNums(int count) {
+        this.plantNums = count;
+    }
 }
