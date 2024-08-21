@@ -50,7 +50,7 @@ public class WeatherTokenService {
                 member.updateSnowy(1);
                 break;
             default:
-                log.error("Unexpected weather result: {}", weatherResult);
+                log.error("Unexpected weather result log : {}", weatherResult);
                 throw new Exception400("Unexpected weather result: " + weatherResult);
         }
     }
@@ -100,7 +100,7 @@ public class WeatherTokenService {
                 break;
             default:
                 log.error("Unexpected weather : {}", weatherToken);
-                throw new Exception400("Unexpected weather result: " + weatherToken);
+                throw new Exception400("Unexpected weather token: " + weatherToken);
         }
     }
 }

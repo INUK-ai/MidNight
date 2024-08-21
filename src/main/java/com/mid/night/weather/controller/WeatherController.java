@@ -48,7 +48,7 @@ public class WeatherController {
 
         log.info("currentMemberId : " + CurrentNickName);
 
-        if(GET_LOCATION_COUNT < 3) {
+        if(GET_LOCATION_COUNT < 2) {
             GET_LOCATION_COUNT++;
         }
 
