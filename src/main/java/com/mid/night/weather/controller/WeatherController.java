@@ -43,7 +43,7 @@ public class WeatherController {
                 LocationResponseDTO.GetWeatherResultDTO.class);
 
         // 토큰 생성
-        log.info("결과값 : {}", resultDTO.result());
+        log.info("결과값 : {}", resultDTO.Result());
 
         // 토큰 값 저장
         weatherTokenService.updateWeatherToken(getCurrentMemberNickName(), resultDTO);

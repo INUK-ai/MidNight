@@ -7,6 +7,7 @@ import com.mid.night.member.domain.Member;
 import com.mid.night.member.dto.MemberRequestDTO;
 import com.mid.night.member.dto.MemberResponseDTO;
 import com.mid.night.member.repository.MemberRepository;
+import com.mid.night.plant.domain.Plant;
 import com.mid.night.plant.repository.PlantRepository;
 import com.mid.night.redis.domain.RefreshToken;
 import com.mid.night.redis.repository.RefreshTokenRedisRepository;
@@ -53,8 +54,23 @@ public class MemberService {
         Member member = memberRepository.findMemberByNickName(nickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
+        // 1. 닉네임 확인 및 회원 생성
+        findPlantByMember(member)
+                .ifPresentOrElse(
+                        plant -> log.info("기존 회원 로그인: {}", plant.getPlantName()),
+                        () -> newPlant(member)
+                );
 
-        return getAuthTokenDTO(member, httpServletRequest);
+        Plant plant = plantRepository.findPlantByMember(member)
+                .orElseThrow(() -> new Exception400("해당 회원은 키우고 있는 식물이 없습니다."));
+
+        return getAuthTokenDTO(member, plant, httpServletRequest);
+    }
+
+    private Optional<Plant> findPlantByMember(Member member) {
+        log.info("식물 확인");
+
+        return plantRepository.findPlantByMember(member);
     }
 
     protected Optional<Member> findMemberByNickName(String nickName) {
@@ -75,8 +91,18 @@ public class MemberService {
         log.info("새로운 회원 생성: " + nickName);
     }
 
+    // 식물 생성
+    protected void newPlant(Member member) {
+        Plant newPlant = Plant.builder()
+                .member(member)
+                .build();
+
+        plantRepository.save(newPlant);
+        log.info("새로운 회원 생성: " + newPlant.getPlantName());
+    }
+
     // 토큰 발급
-    protected MemberResponseDTO.authTokenDTO getAuthTokenDTO(Member member, HttpServletRequest httpServletRequest) {
+    protected MemberResponseDTO.authTokenDTO getAuthTokenDTO(Member member, Plant plant, HttpServletRequest httpServletRequest) {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                 = new UsernamePasswordAuthenticationToken(member.getNickName(), member.getNickName());
@@ -88,6 +114,7 @@ public class MemberService {
 
         MemberResponseDTO.authTokenDTO authTokenDTO = jwtTokenProvider.generateToken(
                 member,
+                plant,
                 authorities
         );
 

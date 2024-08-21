@@ -2,6 +2,7 @@ package com.mid.night._core.jwt;
 
 import com.mid.night.member.domain.Member;
 import com.mid.night.member.dto.MemberResponseDTO;
+import com.mid.night.plant.domain.Plant;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -46,7 +47,7 @@ public class JWTTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public MemberResponseDTO.authTokenDTO generateToken(Member member, Collection<? extends GrantedAuthority> grantedAuthorities) {
+    public MemberResponseDTO.authTokenDTO generateToken(Member member, Plant plant, Collection<? extends GrantedAuthority> grantedAuthorities) {
         // 권한 확인
         String authorities = grantedAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -85,8 +86,8 @@ public class JWTTokenProvider {
                 ACCESS_TOKEN_LIFETIME,
                 refreshToken,
                 REFRESH_TOKEN_LIFETIME,
-                String.valueOf(0), // GrowthGauge
-                "토마토",
+                String.valueOf(plant.getGrowthGauge()), // GrowthGauge
+                plant.getPlantName(),
                 String.valueOf(member.getPlantNums()),
                 String.valueOf(member.getSunny()),
                 String.valueOf(member.getCloudy()),

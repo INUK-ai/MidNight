@@ -25,7 +25,7 @@ public class WeatherTokenService {
         Member member = memberRepository.findMemberByNickName(currentMemberNickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
-        switch (resultDTO.result()) {
+        switch (resultDTO.Result()) {
             case "Sunny":
                 member.updateSunny(1);
                 break;
@@ -42,8 +42,8 @@ public class WeatherTokenService {
                 member.updateSnowy(1);
                 break;
             default:
-                log.error("Unexpected weather result: {}", resultDTO.result());
-                throw new Exception400("Unexpected weather result: " + resultDTO.result());
+                log.error("Unexpected weather result: {}", resultDTO.Result());
+                throw new Exception400("Unexpected weather result: " + resultDTO.Result());
         }
 
         // 혹시 모르니까
