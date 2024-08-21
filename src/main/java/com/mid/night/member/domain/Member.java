@@ -43,10 +43,10 @@ public class Member extends BaseTimeEntity {
         this.nickName = nickName;
         this.password = password;
         this.authority = authority;
-        this.sunny = 0;
-        this.cloudy = 0;
-        this.windy = 0;
-        this.rainy = 0;
-        this.snowy = 0;
+        this.sunny = 5;
+        this.cloudy = 4;
+        this.windy = 3;
+        this.rainy = 2;
+        this.snowy = 1;
     }
 }

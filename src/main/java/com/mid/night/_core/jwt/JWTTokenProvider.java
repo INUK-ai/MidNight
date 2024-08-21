@@ -85,11 +85,11 @@ public class JWTTokenProvider {
                 ACCESS_TOKEN_LIFETIME,
                 refreshToken,
                 REFRESH_TOKEN_LIFETIME,
-                member.getSunny(),
-                member.getCloudy(),
-                member.getWindy(),
-                member.getRainy(),
-                member.getSnowy()
+                String.valueOf(member.getSunny()),
+                String.valueOf(member.getCloudy()),
+                String.valueOf(member.getWindy()),
+                String.valueOf(member.getRainy()),
+                String.valueOf(member.getSnowy())
         );
     }
 

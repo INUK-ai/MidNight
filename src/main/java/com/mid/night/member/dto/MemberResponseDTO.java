@@ -14,11 +14,11 @@ public class MemberResponseDTO {
             Long accessTokenValidTime,
             String refreshToken,
             Long refreshTokenValidTime,
-            int Sunny,
-            int Cloudy,
-            int Windy,
-            int Rainy,
-            int Snowy
+            String Sunny,
+            String Cloudy,
+            String Windy,
+            String Rainy,
+            String Snowy
     ) {
     }
 

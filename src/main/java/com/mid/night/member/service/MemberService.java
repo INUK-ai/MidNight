@@ -131,6 +131,8 @@ public class MemberService {
         Member member = memberRepository.findMemberByNickName(nickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
-        return null;
+        String plantName = "토마토";
+
+        return new MemberResponseDTO.RecordDTO(member.getNickName(), null, plantName);
     }
 }
