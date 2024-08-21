@@ -71,7 +71,27 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateSnowy(int count) {
-        this.snowy += count;
+        this.snowy = count;
+    }
+
+    public void initSunny(int count) {
+        this.sunny = count;
+    }
+
+    public void initCloudy(int count) {
+        this.cloudy = count;
+    }
+
+    public void initWindy(int count) {
+        this.windy = count;
+    }
+
+    public void initRainy(int count) {
+        this.rainy = count;
+    }
+
+    public void initSnowy(int count) {
+        this.snowy = count;
     }
 
     public void updatePlantNums() {

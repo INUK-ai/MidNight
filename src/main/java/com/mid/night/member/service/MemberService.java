@@ -54,6 +54,8 @@ public class MemberService {
         Member member = memberRepository.findMemberByNickName(nickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
+        initWeatherToken(member);
+
         // 1. 닉네임 확인 및 회원 생성
         findPlantByMember(member)
                 .ifPresentOrElse(
@@ -65,6 +67,16 @@ public class MemberService {
                 .orElseThrow(() -> new Exception400("해당 회원은 키우고 있는 식물이 없습니다."));
 
         return getAuthTokenDTO(member, plant, httpServletRequest);
+    }
+
+    private void initWeatherToken(Member member) {
+        member.initSunny(2);
+        member.initCloudy(2);
+        member.initWindy(2);
+        member.initRainy(2);
+        member.initSnowy(2);
+
+        memberRepository.save(member);
     }
 
     private Optional<Plant> findPlantByMember(Member member) {
