@@ -1,7 +1,9 @@
 package com.mid.night.weather.controller;
 
+import com.mid.night._core.error.exception.Exception401;
 import com.mid.night._core.utils.ApiUtils;
 import com.mid.night._core.utils.WebClientUtils;
+import com.mid.night.member.repository.MemberRepository;
 import com.mid.night.weather.dto.LocationRequestDTO;
 import com.mid.night.weather.dto.LocationResponseDTO;
 import com.mid.night.weather.dto.WeatherTokenRequestDTO;
@@ -27,6 +29,7 @@ public class WeatherController {
     private static final String CurrentNickName = "MTVS";
 
     private static int GET_LOCATION_COUNT = 0;
+    private final MemberRepository memberRepository;
 
     /*
         위치 정보 가져오기
@@ -35,6 +38,8 @@ public class WeatherController {
     public ResponseEntity<?> getWeatherToken() {
 
         log.info("get weather token");
+
+        checkCurrentMember();
 
         LocationRequestDTO.GetLocationDTO getLocationDTO = locationService.getLocation(GET_LOCATION_COUNT);
 
@@ -48,7 +53,7 @@ public class WeatherController {
 
         log.info("currentMemberId : " + CurrentNickName);
 
-        if(GET_LOCATION_COUNT < 2) {
+        if(GET_LOCATION_COUNT < 3) {
             GET_LOCATION_COUNT++;
         }
 
@@ -56,6 +61,12 @@ public class WeatherController {
         weatherTokenService.updateWeatherToken(CurrentNickName, resultDTO);
 
         return ResponseEntity.ok().body(ApiUtils.success(resultDTO));
+    }
+
+    private void checkCurrentMember() {
+
+        memberRepository.findMemberByNickName(WeatherController.CurrentNickName)
+                .orElseThrow(() -> new Exception401("허가되지 않은 사용자입니다."));
     }
 
     /*
