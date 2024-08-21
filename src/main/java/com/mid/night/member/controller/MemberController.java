@@ -33,7 +33,7 @@ public class MemberController {
     }
 
     /*
-        로그아웃 - Refresh Token 필요
+        로그아웃
      */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {

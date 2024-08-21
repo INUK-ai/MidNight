@@ -26,6 +26,8 @@ public class WeatherController {
     private static final String REQUEST_URL = "http://192.168.1.43:7777/weather";
     private static final String CurrentNickName = "MTVS";
 
+    private static int GET_LOCATION_COUNT = 0;
+
     /*
         위치 정보 가져오기
      */
@@ -34,7 +36,7 @@ public class WeatherController {
 
         log.info("get weather token");
 
-        LocationRequestDTO.GetLocationDTO getLocationDTO = locationService.getLocation();
+        LocationRequestDTO.GetLocationDTO getLocationDTO = locationService.getLocation(GET_LOCATION_COUNT);
 
         LocationResponseDTO.GetWeatherResultDTO resultDTO = webClientUtils.postSync(
                 REQUEST_URL,
@@ -45,6 +47,10 @@ public class WeatherController {
         log.info("결과값 : {}", resultDTO.Result());
 
         log.info("currentMemberId : " + CurrentNickName);
+
+        if(GET_LOCATION_COUNT < 3) {
+            GET_LOCATION_COUNT++;
+        }
 
         // 토큰 값 저장
         weatherTokenService.updateWeatherToken(CurrentNickName, resultDTO);

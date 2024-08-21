@@ -30,6 +30,6 @@ public class Plant {
     public Plant(Member member) {
         this.member = member;
         this.plantName = "토마토";
-        this.GrowthGauge = 0;
+        this.GrowthGauge = 100;
     }
 }

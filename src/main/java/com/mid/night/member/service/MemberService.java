@@ -131,6 +131,7 @@ public class MemberService {
     /*
         로그아웃
      */
+    @Transactional
     public MemberResponseDTO.RecordDTO logout(HttpServletRequest httpServletRequest, String currentMemberNickName) {
 
         log.info("로그아웃 - Refresh Token 확인");
@@ -145,6 +146,8 @@ public class MemberService {
 
         Plant plant = plantRepository.findPlantByMember(member)
                 .orElseThrow(() -> new Exception400("해당 회원은 키우고 있는 식물이 없습니다."));
+
+        member.updatePlantNums();
 
         return new MemberResponseDTO.RecordDTO(
                 member.getNickName(),

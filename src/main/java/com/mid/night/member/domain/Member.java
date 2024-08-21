@@ -47,11 +47,11 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.authority = authority;
         this.plantNums = 0;
-        this.sunny = 5;
-        this.cloudy = 4;
-        this.windy = 3;
+        this.sunny = 2;
+        this.cloudy = 2;
+        this.windy = 2;
         this.rainy = 2;
-        this.snowy = 1;
+        this.snowy = 2;
     }
 
     public void updateSunny(int count) {
@@ -72,5 +72,9 @@ public class Member extends BaseTimeEntity {
 
     public void updateSnowy(int count) {
         this.snowy += count;
+    }
+
+    public void updatePlantNums() {
+        this.plantNums++;
     }
 }
