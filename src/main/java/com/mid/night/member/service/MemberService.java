@@ -135,25 +135,22 @@ public class MemberService {
 
         log.info("로그아웃 - Refresh Token 확인");
 
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-
-        if(token == null || !jwtTokenProvider.validateToken(token)) {
-            throw new Exception400("유효하지 않은 Refresh Token 입니다.");
-        }
-
-        RefreshToken refreshToken = refreshTokenRedisRepository.findByRefreshToken(token);
-        refreshTokenRedisRepository.delete(refreshToken);
-
         return getRecordData(currentMemberNickName);
     }
 
-    private MemberResponseDTO.RecordDTO getRecordData(String nickName) {
+    private MemberResponseDTO.RecordDTO getRecordData(String currentMemberNickName) {
 
-        Member member = memberRepository.findMemberByNickName(nickName)
+        Member member = memberRepository.findMemberByNickName(currentMemberNickName)
                 .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
 
-        String plantName = "토마토";
+        Plant plant = plantRepository.findPlantByMember(member)
+                .orElseThrow(() -> new Exception400("해당 회원은 키우고 있는 식물이 없습니다."));
 
-        return new MemberResponseDTO.RecordDTO(member.getNickName(), String.valueOf(member.getPlantNums()), plantName);
+        return new MemberResponseDTO.RecordDTO(
+                member.getNickName(),
+                String.valueOf(member.getPlantNums()),
+                plant.getPlantName(),
+                String.valueOf(plant.getGrowthGauge())
+        );
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/plant")
 public class PlantController {
 
+    private static final String CurrentNickName = "MTVS";
+
     /*
         식물 정보 가져오기
      */

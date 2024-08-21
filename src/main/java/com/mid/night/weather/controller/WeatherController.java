@@ -4,15 +4,13 @@ import com.mid.night._core.utils.ApiUtils;
 import com.mid.night._core.utils.WebClientUtils;
 import com.mid.night.weather.dto.LocationRequestDTO;
 import com.mid.night.weather.dto.LocationResponseDTO;
-import com.mid.night.weather.dto.WeatherTokenResponseDTO;
+import com.mid.night.weather.dto.WeatherTokenRequestDTO;
 import com.mid.night.weather.service.LocationService;
 import com.mid.night.weather.service.WeatherTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static com.mid.night._core.utils.SecurityUtils.getCurrentMemberNickName;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +24,7 @@ public class WeatherController {
     private final WeatherTokenService weatherTokenService;
 
     private static final String REQUEST_URL = "http://192.168.1.43:7777/weather";
+    private static final String CurrentNickName = "MTVS";
 
     /*
         위치 정보 가져오기
@@ -45,8 +44,10 @@ public class WeatherController {
         // 토큰 생성
         log.info("결과값 : {}", resultDTO.Result());
 
+        log.info("currentMemberId : " + CurrentNickName);
+
         // 토큰 값 저장
-        weatherTokenService.updateWeatherToken(getCurrentMemberNickName(), resultDTO);
+        weatherTokenService.updateWeatherToken(CurrentNickName, resultDTO);
 
         return ResponseEntity.ok().body(ApiUtils.success(resultDTO));
     }
@@ -55,7 +56,11 @@ public class WeatherController {
         TODO: 날씨 토큰 값 업데이트
      */
     @PostMapping
-    public ResponseEntity<?> updateWeatherToken() {
+    public ResponseEntity<?> useWeatherToken(@RequestBody WeatherTokenRequestDTO.UseWeatherTokenDTO useWeatherTokenDTO) {
+
+        log.info("use weather token : " + useWeatherTokenDTO.Result());
+
+        weatherTokenService.useWeatherToken(CurrentNickName, useWeatherTokenDTO);
 
         return ResponseEntity.ok().body(ApiUtils.success(null));
     }

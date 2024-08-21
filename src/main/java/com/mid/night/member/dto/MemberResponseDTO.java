@@ -92,7 +92,8 @@ public class MemberResponseDTO {
     public record RecordDTO(
             String UserName,
             String PlantNums,
-            String PlantName
+            String PlantName,
+            String GrowthGauge
     ) {
     }
 }
