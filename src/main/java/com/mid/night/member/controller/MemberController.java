@@ -35,17 +35,6 @@ public class MemberController {
     }
 
     /*
-        Access Token 재발급 - Refresh Token 필요
-     */
-    @PostMapping("/reissue")
-    public ResponseEntity<?> reissueToken(HttpServletRequest httpServletRequest) {
-
-        MemberResponseDTO.authTokenDTO responseDTO = memberService.reissueToken(httpServletRequest);
-
-        return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
-    }
-
-    /*
         로그아웃 - Refresh Token 필요
      */
     @PostMapping("/logout")
@@ -53,16 +42,8 @@ public class MemberController {
 
         log.info("로그아웃 시도");
 
-        memberService.logout(httpServletRequest);
+        MemberResponseDTO.RecordDTO responseDTO = memberService.logout(httpServletRequest, getCurrentMemberId());
 
-        return ResponseEntity.ok().body(ApiUtils.success(null));
-    }
-
-    @GetMapping("test")
-    public ResponseEntity<?> test(HttpServletRequest httpServletRequest) {
-
-        Long memberId = getCurrentMemberId();
-
-        return ResponseEntity.ok().body(ApiUtils.success(memberId));
+        return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
     }
 }

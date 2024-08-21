@@ -13,7 +13,12 @@ public class MemberResponseDTO {
             String accessToken,
             Long accessTokenValidTime,
             String refreshToken,
-            Long refreshTokenValidTime
+            Long refreshTokenValidTime,
+            int Sunny,
+            int Cloudy,
+            int Windy,
+            int Rainy,
+            int Snowy
     ) {
     }
 
@@ -79,5 +84,12 @@ public class MemberResponseDTO {
                 String gender
         ) {
         }
+    }
+
+    public record RecordDTO(
+            String UserName,
+            String PlantNums,
+            String PlantName
+    ) {
     }
 }

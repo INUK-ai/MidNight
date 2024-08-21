@@ -31,7 +31,12 @@ public class SecurityConfig {
     private final JWTTokenProvider jwtTokenProvider;
 
     private static final String[] WHITE_LIST = {
-            "/api/auth/**"
+            "/api/auth/**",
+            "/swagger-ui/**",
+            "/favicon.ico",
+            "/error",
+            "/swagger-resources/**",
+            "/v3/api-docs/**"
     };
 
     @Bean

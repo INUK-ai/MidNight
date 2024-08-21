@@ -1,5 +1,6 @@
 package com.mid.night._core.jwt;
 
+import com.mid.night.member.domain.Member;
 import com.mid.night.member.dto.MemberResponseDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -45,11 +46,7 @@ public class JWTTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public MemberResponseDTO.authTokenDTO generateToken(Authentication authentication) {
-        return generateToken(authentication.getName(), authentication.getAuthorities());
-    }
-
-    public MemberResponseDTO.authTokenDTO generateToken(String name, Collection<? extends GrantedAuthority> grantedAuthorities) {
+    public MemberResponseDTO.authTokenDTO generateToken(Member member, Collection<? extends GrantedAuthority> grantedAuthorities) {
         // 권한 확인
         String authorities = grantedAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -61,7 +58,7 @@ public class JWTTokenProvider {
         // Access 토큰 제작
         String accessToken = Jwts.builder()
                 // 아이디 주입
-                .setSubject(name)
+                .setSubject(member.getNickName())
                 // 권한 주입
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(CLAIM_TYPE, TYPE_ACCESS)
@@ -81,7 +78,19 @@ public class JWTTokenProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
-        return new MemberResponseDTO.authTokenDTO(name, BEARER_TYPE, accessToken, ACCESS_TOKEN_LIFETIME, refreshToken, REFRESH_TOKEN_LIFETIME);
+        return new MemberResponseDTO.authTokenDTO(
+                member.getNickName(),
+                BEARER_TYPE,
+                accessToken,
+                ACCESS_TOKEN_LIFETIME,
+                refreshToken,
+                REFRESH_TOKEN_LIFETIME,
+                member.getSunny(),
+                member.getCloudy(),
+                member.getWindy(),
+                member.getRainy(),
+                member.getSnowy()
+        );
     }
 
     public boolean validateToken(String token) {

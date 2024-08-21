@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/location")
-public class LocationController {
+@RequestMapping("/api/weather")
+public class WeatherController {
 
     private final WebClientUtils webClientUtils;
 
@@ -25,16 +25,31 @@ public class LocationController {
     /*
         위치 정보 가져오기
      */
-    @PostMapping("/weather")
+    @PostMapping("/location")
     public ResponseEntity<?> getWeatherToken() {
 
         LocationRequestDTO.GetLocationDTO getLocationDTO = locationService.getLocation();
 
-        LocationResponseDTO.GetWeatherResultDTO responseDTO = webClientUtils.postSync(REQUEST_URL, getLocationDTO, LocationResponseDTO.GetWeatherResultDTO.class);
+        LocationResponseDTO.GetWeatherResultDTO responseDTO = webClientUtils.postSync(
+                REQUEST_URL,
+                getLocationDTO,
+                LocationResponseDTO.GetWeatherResultDTO.class);
 
         // 토큰 생성
         log.info("결과값 : {}", responseDTO.result());
 
+        // 토큰 값 저장
+
+
         return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
+    }
+
+    /*
+        TODO: 날씨 토큰 값 업데이트
+     */
+    @PostMapping
+    public ResponseEntity<?> updateWeatherToken() {
+
+        return ResponseEntity.ok().body(ApiUtils.success(null));
     }
 }

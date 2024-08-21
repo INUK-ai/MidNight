@@ -22,9 +22,11 @@ public class JWTTokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
+        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        String requestURI = httpRequest.getRequestURI();
+
         // Request Header 에서 JWT Token 추출
-        String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
-        String requestURI = ((HttpServletRequest) servletRequest).getRequestURI();
+        String token = jwtTokenProvider.resolveToken(httpRequest);
 
         // 토큰 유효성 검사
         /*
@@ -35,8 +37,8 @@ public class JWTTokenFilter extends GenericFilterBean {
             -> 내부적으로 권한에 대한 정보가 없기 때문에 Exception 발생
             => 토큰 재발급 요청 path인 경우 필터 패스
          */
-        if(token != null && jwtTokenProvider.validateToken(token)) {
-            if(!requestURI.equals("/api/auth/reissue") && !requestURI.equals("/api/auth/logout")) {
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            if (!requestURI.equals("/api/auth/reissue") && !requestURI.equals("/api/auth/logout")) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

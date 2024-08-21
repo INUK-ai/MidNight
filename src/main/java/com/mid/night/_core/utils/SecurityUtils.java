@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
 
-    public static Long getCurrentMemberId() {
+    public static String getCurrentMemberId() {
 
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -13,6 +13,6 @@ public class SecurityUtils {
             throw new Exception403("익명의 유저는 접근 권한이 없습니다.");
         }
 
-        return Long.parseLong(name);
+        return name;
     }
 }

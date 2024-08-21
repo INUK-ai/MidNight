@@ -47,7 +47,10 @@ public class MemberService {
                         () -> newMember(nickName)
                 );
 
-        return getAuthTokenDTO(nickName, httpServletRequest);
+        Member member = memberRepository.findMemberByNickName(nickName)
+                .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
+
+        return getAuthTokenDTO(member, httpServletRequest);
     }
 
     // 비밀번호 확인
@@ -79,17 +82,20 @@ public class MemberService {
     }
 
     // 토큰 발급
-    protected MemberResponseDTO.authTokenDTO getAuthTokenDTO(String nickName, HttpServletRequest httpServletRequest) {
+    protected MemberResponseDTO.authTokenDTO getAuthTokenDTO(Member member, HttpServletRequest httpServletRequest) {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                = new UsernamePasswordAuthenticationToken(nickName, nickName);
+                = new UsernamePasswordAuthenticationToken(member.getNickName(), member.getNickName());
         AuthenticationManager manager = authenticationManagerBuilder.getObject();
         Authentication authentication = manager.authenticate(usernamePasswordAuthenticationToken);
 
         // 권한 정보를 추출하여 Collection<? extends GrantedAuthority>로 변환
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        MemberResponseDTO.authTokenDTO authTokenDTO = jwtTokenProvider.generateToken(nickName, authorities);
+        MemberResponseDTO.authTokenDTO authTokenDTO = jwtTokenProvider.generateToken(
+                member,
+                authorities
+        );
 
         refreshTokenRedisRepository.save(RefreshToken.builder()
                 .id(authentication.getName())
@@ -101,48 +107,10 @@ public class MemberService {
         return authTokenDTO;
     }
 
-    // 토큰 재발급
-    public MemberResponseDTO.authTokenDTO reissueToken(HttpServletRequest httpServletRequest) {
-
-        // Request Header 에서 JWT Token 추출
-        String token = jwtTokenProvider.resolveToken(httpServletRequest);
-
-        // 토큰 유효성 검사
-        if(token == null || !jwtTokenProvider.validateToken(token)) {
-            throw new Exception400("유효하지 않은 Access Token 입니다.");
-        }
-
-        // type 확인
-        if(!jwtTokenProvider.isRefreshToken(token)) {
-            throw new Exception400("유효하지 않은 Refresh Token 입니다.");
-        }
-
-        // RefreshToken
-        RefreshToken refreshToken = refreshTokenRedisRepository.findByRefreshToken(token);
-
-        if(refreshToken == null) {
-            throw new Exception400("유효하지 않은 Refresh Token 입니다.");
-        }
-
-        // Redis 에 저장된 RefreshToken 정보를 기반으로 JWT Token 생성
-        MemberResponseDTO.authTokenDTO authTokenDTO = jwtTokenProvider.generateToken(
-                refreshToken.getId(), refreshToken.getAuthorities()
-        );
-
-        // Redis 에 RefreshToken Update
-        refreshTokenRedisRepository.save(RefreshToken.builder()
-                .id(refreshToken.getId())
-                .authorities(refreshToken.getAuthorities())
-                .refreshToken(authTokenDTO.refreshToken())
-                .build());
-
-        return authTokenDTO;
-    }
-
     /*
         로그아웃
      */
-    public void logout(HttpServletRequest httpServletRequest) {
+    public MemberResponseDTO.RecordDTO logout(HttpServletRequest httpServletRequest, String currentMemberNickName) {
 
         log.info("로그아웃 - Refresh Token 확인");
 
@@ -154,5 +122,15 @@ public class MemberService {
 
         RefreshToken refreshToken = refreshTokenRedisRepository.findByRefreshToken(token);
         refreshTokenRedisRepository.delete(refreshToken);
+
+        return getRecordData(currentMemberNickName);
+    }
+
+    private MemberResponseDTO.RecordDTO getRecordData(String nickName) {
+
+        Member member = memberRepository.findMemberByNickName(nickName)
+                .orElseThrow(() -> new Exception400("해당 닉네임의 회원을 찾을 수 없습니다."));
+
+        return null;
     }
 }
