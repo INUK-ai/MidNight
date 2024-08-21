@@ -27,10 +27,26 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault("'USER'")
     private Authority authority;
 
+    @Column
+    private int sunny;
+    @Column
+    private int cloudy;
+    @Column
+    private int windy;
+    @Column
+    private int rainy;
+    @Column
+    private int snowy;
+
     @Builder
     public Member(String nickName, String password, Authority authority) {
         this.nickName = nickName;
         this.password = password;
         this.authority = authority;
+        this.sunny = 0;
+        this.cloudy = 0;
+        this.windy = 0;
+        this.rainy = 0;
+        this.snowy = 0;
     }
 }
